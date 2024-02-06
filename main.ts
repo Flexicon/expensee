@@ -6,10 +6,14 @@ import {
 
 import {
   runClearCommand,
+  runConfigCommand,
+  runConfigListCommand,
+  runConfigResetCommand,
   runMarkCommand,
   runSnoozeCommand,
   runStatusCommand,
 } from "./cmds.ts";
+import { Config, loadConfig } from "./config.ts";
 
 const MONTHS = [
   "january",
@@ -27,17 +31,26 @@ const MONTHS = [
 
 const capitalize = (val: string) => val.charAt(0).toUpperCase() + val.slice(1);
 
+const validateConfig = (config: Config) => {
+  if (!config.sheetId) {
+    throw new ValidationError(
+      "Use sheetId option flag or run `config` command before interacting with data source.",
+    );
+  }
+};
+
 if (import.meta.main) {
   await load({ export: true });
+  const config = await loadConfig();
 
   const cmd = new Command()
     .name("expensee")
     .version("0.1.0")
     .description("Simplify checking and updating monthly expense statuses")
-    .globalEnv(
-      "EXPENSEE_SHEET_ID=<value:string>",
-      "Google Sheets document ID to use as data source.",
-      { required: true, prefix: "EXPENSEE_" },
+    .globalOption(
+      "-s, --sheetId <sheet_id:string>",
+      "Sheet ID to use as data source.",
+      { default: config.sheetId },
     )
     .globalOption(
       "-m, --month <name:string>",
@@ -58,20 +71,48 @@ if (import.meta.main) {
     .default("status")
     // Status cmd
     .command("status")
-    .description("TODO")
-    .action((opts) => runStatusCommand(opts))
-    // Pay cmd
+    .description("Report on the expenses current status for the month.")
+    .action((opts) => {
+      validateConfig(opts);
+      return runStatusCommand(opts);
+    })
+    // Config cmd
+    .command("config")
+    .description("Configure credentials and settings.")
+    .option(
+      "-r, --reset",
+      "Reset all settings by deleting user config files.",
+      {
+        standalone: true,
+        action: (_) => runConfigResetCommand(),
+      },
+    )
+    .option("-l, --list", "List current config settings.", {
+      standalone: true,
+      action: (_) => runConfigListCommand(config),
+    })
+    .action((_) => runConfigCommand(config))
+    // Mark cmd
     .command("mark")
     .description("TODO")
-    .action((_) => runMarkCommand())
+    .action((opts) => {
+      validateConfig(opts);
+      return runMarkCommand();
+    })
     // Clear cmd
     .command("clear")
     .description("TODO")
-    .action((_) => runClearCommand())
-    // Ignore cmd
+    .action((opts) => {
+      validateConfig(opts);
+      return runClearCommand();
+    })
+    // Snooze cmd
     .command("snooze")
     .description("TODO")
-    .action((_) => runSnoozeCommand());
+    .action((opts) => {
+      validateConfig(opts);
+      return runSnoozeCommand();
+    });
 
   // Run 🚀
   await cmd.parse(Deno.args);

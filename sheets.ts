@@ -5,7 +5,7 @@ import {
 } from "npm:google-spreadsheet";
 import { JWT } from "npm:google-auth-library";
 
-import creds from "./g-creds.json" with { type: "json" };
+import { loadCredsFile } from "./config.ts";
 
 const DATA_START_ROW = 22;
 const DATA_CELL_RANGE = "A23:M26";
@@ -20,6 +20,7 @@ export interface DataCell {
 export async function loadSheet(
   sheetId: string,
 ): Promise<GoogleSpreadsheetWorksheet> {
+  const creds = await loadCredsFile();
   const jwt = new JWT({
     email: creds.client_email,
     key: creds.private_key,
