@@ -3,6 +3,7 @@ import {
   Confirm,
   Input,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { ansi } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/ansi.ts";
 
 import {
   Config,
@@ -27,7 +28,9 @@ export type KeyedCommandOptions = BaseCommandOptions & {
 };
 
 export async function runStatusCommand(opts: StatusCommandOptions) {
+  console.log("👀 Loading your expenses...\n");
   const cells = await loadCellsForMonth(opts.sheetId, opts.month);
+  console.log(ansi.cursorUp(2).cursorLeft.eraseLine());
 
   for (const cell of cells) {
     printCellStatus(cell);
