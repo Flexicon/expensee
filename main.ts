@@ -1,6 +1,7 @@
 import { load } from "https://deno.land/std@0.214.0/dotenv/mod.ts";
 import {
   Command,
+  EnumType,
   ValidationError,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
 
@@ -14,6 +15,7 @@ import {
   runStatusCommand,
 } from "./cmds.ts";
 import { Config, loadConfig } from "./config.ts";
+import { DataKey } from "./sheets.ts";
 
 const MONTHS = [
   "january",
@@ -47,6 +49,7 @@ if (import.meta.main) {
     .name("expensee")
     .version("0.1.0")
     .description("Simplify checking and updating monthly expense statuses")
+    .globalType("data-key", new EnumType(DataKey))
     .globalOption(
       "-s, --sheetId <sheet_id:string>",
       "Sheet ID to use as data source.",
@@ -95,23 +98,26 @@ if (import.meta.main) {
     // Mark cmd
     .command("mark")
     .description("TODO")
-    .action((opts) => {
+    .arguments("<key:data-key>")
+    .action((opts, key) => {
       validateConfig(opts);
-      return runMarkCommand();
+      return runMarkCommand({ ...opts, key });
     })
     // Clear cmd
     .command("clear")
     .description("TODO")
-    .action((opts) => {
+    .arguments("<key:data-key>")
+    .action((opts, key) => {
       validateConfig(opts);
-      return runClearCommand();
+      return runClearCommand({ ...opts, key });
     })
     // Snooze cmd
     .command("snooze")
     .description("TODO")
-    .action((opts) => {
+    .arguments("<key:data-key>")
+    .action((opts, key) => {
       validateConfig(opts);
-      return runSnoozeCommand();
+      return runSnoozeCommand({ ...opts, key });
     });
 
   // Run 🚀

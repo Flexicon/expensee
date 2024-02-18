@@ -4,7 +4,6 @@ import {
   Input,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 
-import { DataCell, getCellsForMonth, loadSheet } from "./sheets.ts";
 import {
   Config,
   configCredsPath,
@@ -13,31 +12,44 @@ import {
   saveConfig,
 } from "./config.ts";
 import { resetAllConfig } from "./config.ts";
+import { loadCellsForMonth, updateCell } from "./sheets.ts";
+import type { DataCell, DataKey } from "./sheets.ts";
 
-export type StatusCommandOptions = {
+export type BaseCommandOptions = {
   sheetId: string;
   month: number;
 };
 
+export type StatusCommandOptions = BaseCommandOptions;
+
+export type KeyedCommandOptions = BaseCommandOptions & {
+  key: DataKey;
+};
+
 export async function runStatusCommand(opts: StatusCommandOptions) {
-  const sheet = await loadSheet(opts.sheetId);
-  const cells = getCellsForMonth(sheet, opts.month);
+  const cells = await loadCellsForMonth(opts.sheetId, opts.month);
 
   for (const cell of cells) {
     printCellStatus(cell);
   }
 }
 
-export function runMarkCommand() {
-  console.log("running mark command...");
+export async function runMarkCommand(opts: KeyedCommandOptions) {
+  console.log(`Marking off ${opts.key} for the month...`);
+  await updateCell(opts.sheetId, opts.month, opts.key, "✔");
+  console.log("👍 Done");
 }
 
-export function runClearCommand() {
-  console.log("running clear command...");
+export async function runClearCommand(opts: KeyedCommandOptions) {
+  console.log(`Clearing ${opts.key} for the month...`);
+  await updateCell(opts.sheetId, opts.month, opts.key, "");
+  console.log("👍 Done");
 }
 
-export function runSnoozeCommand() {
-  console.log("running snooze command...");
+export async function runSnoozeCommand(opts: KeyedCommandOptions) {
+  console.log(`Snoozing ${opts.key} for the month...`);
+  await updateCell(opts.sheetId, opts.month, opts.key, "X");
+  console.log("👍 Done");
 }
 
 export async function runConfigResetCommand() {

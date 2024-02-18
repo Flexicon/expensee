@@ -7,17 +7,55 @@ import { JWT } from "npm:google-auth-library";
 
 import { loadCredsFile } from "./config.ts";
 
-const DATA_START_ROW = 22;
-const DATA_CELL_RANGE = "A23:M26";
+const capitalize = (val: string) => val.charAt(0).toUpperCase() + val.slice(1);
 
-const DATA_LABELS = ["Apartment", "Mortgage", "Electric", "Internet"];
+const DATA_START_ROW = 22;
+const DATA_CELL_RANGE = "A23:M27";
+
+export enum DataKey {
+  Apartment = "apartment",
+  Mortgage = "mortgage",
+  Electric = "electric",
+  Internet = "internet",
+  Hetzner = "hetzner",
+}
+
+const DATA_LABELS = [
+  capitalize(DataKey.Apartment),
+  capitalize(DataKey.Mortgage),
+  capitalize(DataKey.Electric),
+  capitalize(DataKey.Internet),
+  capitalize(DataKey.Hetzner),
+];
 
 export interface DataCell {
   name: string;
   value: GoogleSpreadsheetCell;
 }
 
-export async function loadSheet(
+export async function loadCellsForMonth(
+  sheetId: string,
+  month: number,
+): Promise<DataCell[]> {
+  const sheet = await loadSheet(sheetId);
+  return getCellsForMonth(sheet, month);
+}
+
+export async function updateCell(
+  sheetId: string,
+  month: number,
+  key: DataKey,
+  value: string,
+) {
+  const sheet = await loadSheet(sheetId);
+
+  const keyIdx = DATA_LABELS.indexOf(capitalize(key));
+  sheet.getCell(DATA_START_ROW + keyIdx, month).value = value;
+
+  await sheet.saveUpdatedCells();
+}
+
+async function loadSheet(
   sheetId: string,
 ): Promise<GoogleSpreadsheetWorksheet> {
   const creds = await loadCredsFile();
@@ -39,12 +77,12 @@ export async function loadSheet(
   return sheet;
 }
 
-export function getCellsForMonth(
+function getCellsForMonth(
   sheet: GoogleSpreadsheetWorksheet,
   month: number,
 ): DataCell[] {
-  return [...Array(4).keys()].map((i) => ({
-    name: DATA_LABELS[i],
+  return DATA_LABELS.map((name, i) => ({
+    name,
     value: sheet.getCell(DATA_START_ROW + i, month),
   }));
 }
