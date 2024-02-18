@@ -32,6 +32,7 @@ export async function runStatusCommand(opts: StatusCommandOptions) {
   const cells = await loadCellsForMonth(opts.sheetId, opts.month);
   console.log(ansi.cursorUp(2).cursorLeft.eraseLine());
 
+  // TODO: refactor to use cliffy tables: https://cliffy.io/docs@v1.0.0-rc.3/table/options
   for (const cell of cells) {
     printCellStatus(cell);
   }
