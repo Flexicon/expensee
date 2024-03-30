@@ -4,7 +4,10 @@ import {
   Input,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { ansi } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/ansi.ts";
+import { colors } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/colors.ts";
+import { Table } from "https://deno.land/x/cliffy@v1.0.0-rc.3/table/mod.ts";
 
+import { capitalize } from "./formatting.ts";
 import {
   Config,
   configCredsPath,
@@ -13,8 +16,9 @@ import {
   saveConfig,
 } from "./config.ts";
 import { resetAllConfig } from "./config.ts";
+import { MONTHS } from "./consts.ts";
 import { loadCellsForMonth, updateCell } from "./sheets.ts";
-import type { DataCell, DataKey } from "./sheets.ts";
+import type { DataKey } from "./sheets.ts";
 
 export type BaseCommandOptions = {
   sheetId: string;
@@ -31,11 +35,13 @@ export async function runStatusCommand(opts: StatusCommandOptions) {
   console.log("👀 Loading your expenses...\n");
   const cells = await loadCellsForMonth(opts.sheetId, opts.month);
   console.log(ansi.cursorUp(2).cursorLeft.eraseLine());
+  const monthName = capitalize(MONTHS[opts.month - 1]);
 
-  // TODO: refactor to use cliffy tables: https://cliffy.io/docs@v1.0.0-rc.3/table/options
-  for (const cell of cells) {
-    printCellStatus(cell);
-  }
+  new Table()
+    .header(["Expense", `Status (${monthName})`].map(colors.bold))
+    .body(cells.map((c) => [c.name, humanizeCellValue(c.value)]))
+    .minColWidth(12)
+    .render();
 }
 
 export async function runMarkCommand(opts: KeyedCommandOptions) {
@@ -97,10 +103,6 @@ export async function runConfigCommand(config: Config) {
   }
 
   console.log("\n💾 Config updated.");
-}
-
-function printCellStatus(cell: DataCell) {
-  console.log(`${cell.name}:`.padEnd(10), humanizeCellValue(cell.value));
 }
 
 function humanizeCellValue(cell: GoogleSpreadsheetCell): string {

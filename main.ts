@@ -16,22 +16,8 @@ import {
 } from "./cmds.ts";
 import { Config, loadConfig } from "./config.ts";
 import { DataKey } from "./sheets.ts";
-
-const MONTHS = [
-  "january",
-  "february",
-  "march",
-  "april",
-  "may",
-  "june",
-  "july",
-  "august",
-  "september",
-  "november",
-  "december",
-];
-
-const capitalize = (val: string) => val.charAt(0).toUpperCase() + val.slice(1);
+import { MONTHS } from "./consts.ts";
+import { capitalize } from "./formatting.ts";
 
 const validateConfig = (config: Config) => {
   if (!config.sheetId) {
