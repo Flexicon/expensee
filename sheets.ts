@@ -9,15 +9,13 @@ import { loadCredsFile } from "./config.ts";
 
 const capitalize = (val: string) => val.charAt(0).toUpperCase() + val.slice(1);
 
-const DATA_START_ROW = 22;
-const DATA_CELL_RANGE = "A23:M27";
-
 export enum DataKey {
   Apartment = "apartment",
   Mortgage = "mortgage",
   Electric = "electric",
   Internet = "internet",
   Hetzner = "hetzner",
+  Taxes = "taxes",
 }
 
 const DATA_LABELS = [
@@ -26,7 +24,11 @@ const DATA_LABELS = [
   capitalize(DataKey.Electric),
   capitalize(DataKey.Internet),
   capitalize(DataKey.Hetzner),
+  capitalize(DataKey.Taxes),
 ];
+
+const DATA_START_ROW = 22;
+const DATA_CELL_RANGE = `A23:M${DATA_START_ROW + DATA_LABELS.length}`;
 
 export interface DataCell {
   name: string;
