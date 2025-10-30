@@ -1,4 +1,3 @@
-import { load } from "@std/dotenv";
 import { Command, EnumType, ValidationError } from "@cliffy/command";
 
 import {
@@ -24,7 +23,6 @@ const validateConfig = (config: Config) => {
 };
 
 if (import.meta.main) {
-  await load({ export: true });
   const config = await loadConfig();
 
   const cmd = new Command()

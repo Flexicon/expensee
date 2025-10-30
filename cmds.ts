@@ -1,6 +1,7 @@
 import { GoogleSpreadsheetCell } from "npm:google-spreadsheet";
 import { Confirm, Input } from "@cliffy/prompt";
-import { ansi, colors } from "@cliffy/ansi";
+import { ansi } from "@cliffy/ansi";
+import { colors } from "@cliffy/ansi/colors";
 import { Table } from "@cliffy/table";
 
 import { capitalize } from "./formatting.ts";
