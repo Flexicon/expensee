@@ -1,11 +1,7 @@
 import { GoogleSpreadsheetCell } from "npm:google-spreadsheet";
-import {
-  Confirm,
-  Input,
-} from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-import { ansi } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/ansi.ts";
-import { colors } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/colors.ts";
-import { Table } from "https://deno.land/x/cliffy@v1.0.0-rc.3/table/mod.ts";
+import { Confirm, Input } from "@cliffy/prompt";
+import { ansi, colors } from "@cliffy/ansi";
+import { Table } from "@cliffy/table";
 
 import { capitalize } from "./formatting.ts";
 import {

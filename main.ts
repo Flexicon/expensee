@@ -1,9 +1,5 @@
-import { load } from "https://deno.land/std@0.214.0/dotenv/mod.ts";
-import {
-  Command,
-  EnumType,
-  ValidationError,
-} from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
+import { load } from "@std/dotenv";
+import { Command, EnumType, ValidationError } from "@cliffy/command";
 
 import {
   runClearCommand,
