@@ -16,6 +16,7 @@ export enum DataKey {
   Internet = "internet",
   Hetzner = "hetzner",
   Taxes = "taxes",
+  Invoices = "invoices",
 }
 
 const DATA_LABELS = [
@@ -25,6 +26,7 @@ const DATA_LABELS = [
   capitalize(DataKey.Internet),
   capitalize(DataKey.Hetzner),
   capitalize(DataKey.Taxes),
+  capitalize(DataKey.Invoices),
 ];
 
 const DATA_START_ROW = 22;
