@@ -42,7 +42,8 @@ export async function runStatusCommand(opts: StatusCommandOptions) {
 }
 
 export async function runMarkCommand(opts: KeyedCommandOptions) {
-  console.log(`Marking off ${opts.keys.join(", ")} for the month...`);
+  const monthName = capitalize(MONTHS[opts.month - 1]);
+  console.log(`Marking off ${opts.keys.join(", ")} for ${monthName}...`);
   for (const key of opts.keys) {
     await updateCell(opts.sheetId, opts.month, key, "✔");
   }
@@ -50,7 +51,8 @@ export async function runMarkCommand(opts: KeyedCommandOptions) {
 }
 
 export async function runClearCommand(opts: KeyedCommandOptions) {
-  console.log(`Clearing ${opts.keys.join(", ")} for the month...`);
+  const monthName = capitalize(MONTHS[opts.month - 1]);
+  console.log(`Clearing ${opts.keys.join(", ")} for ${monthName}...`);
   for (const key of opts.keys) {
     await updateCell(opts.sheetId, opts.month, key, "");
   }
@@ -58,7 +60,8 @@ export async function runClearCommand(opts: KeyedCommandOptions) {
 }
 
 export async function runSnoozeCommand(opts: KeyedCommandOptions) {
-  console.log(`Snoozing ${opts.keys.join(", ")} for the month...`);
+  const monthName = capitalize(MONTHS[opts.month - 1]);
+  console.log(`Snoozing ${opts.keys.join(", ")} for ${monthName}...`);
   for (const key of opts.keys) {
     await updateCell(opts.sheetId, opts.month, key, "X");
   }
