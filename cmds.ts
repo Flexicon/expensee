@@ -29,9 +29,10 @@ export type KeyedCommandOptions = BaseCommandOptions & {
 };
 
 export async function runStatusCommand(opts: StatusCommandOptions) {
-  console.log("👀 Loading your expenses...\n");
+  console.log("👀 Loading your expenses...");
   const cells = await loadCellsForMonth(opts.sheetId, opts.month);
-  console.log(ansi.cursorUp(2).cursorLeft.eraseLine());
+  process.stdout.write(ansi.cursorUp(1).cursorLeft.eraseLine());
+
   const monthName = capitalize(MONTHS[opts.month - 1]);
 
   new Table()
