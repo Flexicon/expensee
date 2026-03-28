@@ -89,24 +89,24 @@ if (import.meta.main) {
     // Mark cmd
     .command("mark")
     .description("Mark one or more expenses as done (✔)")
-    .arguments("<...keys:string>")
-    .action((opts, keys) => {
+    .arguments("<...keys>")
+    .action((opts, ...keys) => {
       validateConfig(opts);
       return runMarkCommand({ ...opts, keys: parseKeys(keys) });
     })
     // Clear cmd
     .command("clear")
     .description("Clear one or more expense statuses")
-    .arguments("<...keys:string>")
-    .action((opts, keys) => {
+    .arguments("<...keys>")
+    .action((opts, ...keys) => {
       validateConfig(opts);
       return runClearCommand({ ...opts, keys: parseKeys(keys) });
     })
     // Snooze cmd
     .command("snooze")
     .description("Snooze one or more expenses (X)")
-    .arguments("<...keys:string>")
-    .action((opts, keys) => {
+    .arguments("<...keys>")
+    .action((opts, ...keys) => {
       validateConfig(opts);
       return runSnoozeCommand({ ...opts, keys: parseKeys(keys) });
     });
