@@ -38,9 +38,9 @@ expensee [command] [options]
 | Command | Description |
 |---------|-------------|
 | `status` | Show expense statuses for the month (default) |
-| `mark <key>` | Mark an expense as done (✔) |
-| `clear <key>` | Clear an expense status |
-| `snooze <key>` | Snooze an expense (X) |
+| `mark <keys...>` | Mark one or more expenses as done (✔) |
+| `clear <keys...>` | Clear one or more expense statuses |
+| `snooze <keys...>` | Snooze one or more expenses (X) |
 | `config` | Manage configuration (`--list`, `--reset`) |
 
 **Valid keys:** `apartment`, `mortgage`, `electric`, `internet`, `hetzner`, `taxes`, `invoices`
@@ -51,7 +51,9 @@ expensee [command] [options]
 expensee                          # show current month status
 expensee status --month march     # show March status
 expensee mark apartment           # mark apartment as paid
+expensee mark apartment internet  # mark multiple as paid
 expensee snooze taxes --month april
+expensee clear apartment internet taxes
 ```
 
 ## Requirements

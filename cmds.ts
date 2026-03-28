@@ -25,7 +25,7 @@ export type BaseCommandOptions = {
 export type StatusCommandOptions = BaseCommandOptions;
 
 export type KeyedCommandOptions = BaseCommandOptions & {
-  key: DataKey;
+  keys: DataKey[];
 };
 
 export async function runStatusCommand(opts: StatusCommandOptions) {
@@ -42,20 +42,26 @@ export async function runStatusCommand(opts: StatusCommandOptions) {
 }
 
 export async function runMarkCommand(opts: KeyedCommandOptions) {
-  console.log(`Marking off ${opts.key} for the month...`);
-  await updateCell(opts.sheetId, opts.month, opts.key, "✔");
+  console.log(`Marking off ${opts.keys.join(", ")} for the month...`);
+  for (const key of opts.keys) {
+    await updateCell(opts.sheetId, opts.month, key, "✔");
+  }
   console.log("👍 Done");
 }
 
 export async function runClearCommand(opts: KeyedCommandOptions) {
-  console.log(`Clearing ${opts.key} for the month...`);
-  await updateCell(opts.sheetId, opts.month, opts.key, "");
+  console.log(`Clearing ${opts.keys.join(", ")} for the month...`);
+  for (const key of opts.keys) {
+    await updateCell(opts.sheetId, opts.month, key, "");
+  }
   console.log("👍 Done");
 }
 
 export async function runSnoozeCommand(opts: KeyedCommandOptions) {
-  console.log(`Snoozing ${opts.key} for the month...`);
-  await updateCell(opts.sheetId, opts.month, opts.key, "X");
+  console.log(`Snoozing ${opts.keys.join(", ")} for the month...`);
+  for (const key of opts.keys) {
+    await updateCell(opts.sheetId, opts.month, key, "X");
+  }
   console.log("👍 Done");
 }
 

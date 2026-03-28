@@ -22,6 +22,17 @@ const validateConfig = (config: Config) => {
   }
 };
 
+const parseKeys = (keys: unknown): DataKey[] => {
+  const keyArray = Array.isArray(keys) ? keys : [keys];
+  return keyArray.map((k: unknown) => {
+    const key = String(k).toLowerCase() as DataKey;
+    if (!Object.values(DataKey).includes(key)) {
+      throw new ValidationError(`Invalid key: ${key}. Valid keys: ${Object.values(DataKey).join(", ")}`);
+    }
+    return key;
+  });
+};
+
 if (import.meta.main) {
   const config = await loadConfig();
 
@@ -77,27 +88,27 @@ if (import.meta.main) {
     .action((_) => runConfigCommand(config))
     // Mark cmd
     .command("mark")
-    .description("TODO")
-    .arguments("<key:data-key>")
-    .action((opts, key) => {
+    .description("Mark one or more expenses as done (✔)")
+    .arguments("<...keys:string>")
+    .action((opts, keys) => {
       validateConfig(opts);
-      return runMarkCommand({ ...opts, key });
+      return runMarkCommand({ ...opts, keys: parseKeys(keys) });
     })
     // Clear cmd
     .command("clear")
-    .description("TODO")
-    .arguments("<key:data-key>")
-    .action((opts, key) => {
+    .description("Clear one or more expense statuses")
+    .arguments("<...keys:string>")
+    .action((opts, keys) => {
       validateConfig(opts);
-      return runClearCommand({ ...opts, key });
+      return runClearCommand({ ...opts, keys: parseKeys(keys) });
     })
     // Snooze cmd
     .command("snooze")
-    .description("TODO")
-    .arguments("<key:data-key>")
-    .action((opts, key) => {
+    .description("Snooze one or more expenses (X)")
+    .arguments("<...keys:string>")
+    .action((opts, keys) => {
       validateConfig(opts);
-      return runSnoozeCommand({ ...opts, key });
+      return runSnoozeCommand({ ...opts, keys: parseKeys(keys) });
     });
 
   // Run 🚀
