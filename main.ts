@@ -10,7 +10,7 @@ import {
   runStatusCommand,
 } from "./cmds.ts";
 import { type Config, loadConfig } from "./config.ts";
-import { MONTHS } from "./consts.ts";
+import { MONTHS, VERSION } from "./consts.ts";
 import { capitalize } from "./formatting.ts";
 import { DataKey } from "./sheets.ts";
 
@@ -41,7 +41,7 @@ if (import.meta.main) {
 
   const cmd = new Command()
     .name("expensee")
-    .version("0.1.0")
+    .version(VERSION)
     .description("Simplify checking and updating monthly expense statuses")
     .globalType("data-key", new EnumType(DataKey))
     .globalOption(
