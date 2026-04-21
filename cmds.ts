@@ -1,6 +1,6 @@
 import { colors } from "@cliffy/ansi/colors";
 import { tty } from "@cliffy/ansi/tty";
-import { Confirm, Input } from "@cliffy/prompt";
+import { Checkbox, Confirm, Input } from "@cliffy/prompt";
 import { Table } from "@cliffy/table";
 import type { GoogleSpreadsheetCell } from "google-spreadsheet";
 
@@ -14,8 +14,7 @@ import {
 } from "./config.ts";
 import { MONTHS } from "./consts.ts";
 import { capitalize } from "./formatting.ts";
-import type { DataKey } from "./sheets.ts";
-import { loadCellsForMonth, updateCell } from "./sheets.ts";
+import { DataKey, loadCellsForMonth, updateCell } from "./sheets.ts";
 
 export type BaseCommandOptions = {
   sheetId: string;
@@ -43,27 +42,48 @@ export async function runStatusCommand(opts: StatusCommandOptions) {
 }
 
 export async function runMarkCommand(opts: KeyedCommandOptions) {
+  const keys = await resolveKeys(
+    opts.keys,
+    "Which expenses do you want to mark as done?",
+  );
+  if (keys.length === 0) return;
+
   const monthName = capitalize(MONTHS[opts.month - 1]);
-  console.log(`Marking off ${opts.keys.join(", ")} for ${monthName}...`);
-  for (const key of opts.keys) {
+  console.log(`Marking off ${keys.join(", ")} for ${monthName}...`);
+
+  for (const key of keys) {
     await updateCell(opts.sheetId, opts.month, key, "✔");
   }
   console.log("👍 Done");
 }
 
 export async function runClearCommand(opts: KeyedCommandOptions) {
+  const keys = await resolveKeys(
+    opts.keys,
+    "Which expenses do you want to clear?",
+  );
+  if (keys.length === 0) return;
+
   const monthName = capitalize(MONTHS[opts.month - 1]);
-  console.log(`Clearing ${opts.keys.join(", ")} for ${monthName}...`);
-  for (const key of opts.keys) {
+  console.log(`Clearing ${keys.join(", ")} for ${monthName}...`);
+
+  for (const key of keys) {
     await updateCell(opts.sheetId, opts.month, key, "");
   }
   console.log("👍 Done");
 }
 
 export async function runSnoozeCommand(opts: KeyedCommandOptions) {
+  const keys = await resolveKeys(
+    opts.keys,
+    "Which expenses do you want to snooze?",
+  );
+  if (keys.length === 0) return;
+
   const monthName = capitalize(MONTHS[opts.month - 1]);
-  console.log(`Snoozing ${opts.keys.join(", ")} for ${monthName}...`);
-  for (const key of opts.keys) {
+  console.log(`Snoozing ${keys.join(", ")} for ${monthName}...`);
+
+  for (const key of keys) {
     await updateCell(opts.sheetId, opts.month, key, "X");
   }
   console.log("👍 Done");
@@ -123,4 +143,22 @@ function humanizeCellValue(cell: GoogleSpreadsheetCell): string {
     default:
       return `Unexpected value: "${cell.value}"`;
   }
+}
+
+async function resolveKeys(
+  keys: DataKey[],
+  prompt: string,
+): Promise<DataKey[]> {
+  if (keys.length > 0) return keys;
+
+  return await Checkbox.prompt({
+    message: prompt,
+    confirmSubmit: false,
+    minOptions: 1,
+    uncheck: "☐",
+    options: Object.values(DataKey).map((key) => ({
+      name: capitalize(key),
+      value: key,
+    })),
+  }) as DataKey[];
 }

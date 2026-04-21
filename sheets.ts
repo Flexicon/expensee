@@ -19,16 +19,7 @@ export enum DataKey {
   Invoices = "invoices",
 }
 
-const DATA_LABELS = [
-  capitalize(DataKey.Apartment),
-  capitalize(DataKey.Mortgage),
-  capitalize(DataKey.Electric),
-  capitalize(DataKey.Internet),
-  capitalize(DataKey.Hetzner),
-  capitalize(DataKey.Taxes),
-  capitalize(DataKey.Invoices),
-];
-
+const DATA_LABELS = Object.values(DataKey);
 const DATA_START_ROW = 22;
 const DATA_CELL_RANGE = `A23:M${DATA_START_ROW + DATA_LABELS.length}`;
 
@@ -53,7 +44,7 @@ export async function updateCell(
 ) {
   const sheet = await loadSheet(sheetId);
 
-  const keyIdx = DATA_LABELS.indexOf(capitalize(key));
+  const keyIdx = DATA_LABELS.indexOf(key);
   sheet.getCell(DATA_START_ROW + keyIdx, month).value = value;
 
   await sheet.saveUpdatedCells();
@@ -86,7 +77,7 @@ function getCellsForMonth(
   month: number,
 ): DataCell[] {
   return DATA_LABELS.map((name, i) => ({
-    name,
+    name: capitalize(name),
     value: sheet.getCell(DATA_START_ROW + i, month),
   }));
 }
