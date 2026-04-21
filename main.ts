@@ -24,10 +24,13 @@ const validateConfig = (config: Config) => {
 
 const parseKeys = (keys: unknown): DataKey[] => {
   const keyArray = Array.isArray(keys) ? keys : [keys];
+
   return keyArray.map((k: unknown) => {
     const key = String(k).toLowerCase() as DataKey;
     if (!Object.values(DataKey).includes(key)) {
-      throw new ValidationError(`Invalid key: ${key}. Valid keys: ${Object.values(DataKey).join(", ")}`);
+      throw new ValidationError(
+        `Invalid key: ${key}. Valid keys: ${Object.values(DataKey).join(", ")}`,
+      );
     }
     return key;
   });

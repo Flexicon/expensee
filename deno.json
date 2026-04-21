@@ -7,6 +7,6 @@
   },
   "tasks": {
     "build": "deno compile --allow-read --allow-write --allow-env --allow-net --output=./expensee ./main.ts",
-    "build:install": "deno run build && mv ./expensee ~/.local/bin" 
+    "build:install": "deno run build && mv ./expensee ~/.local/bin"
   }
 }

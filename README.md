@@ -22,21 +22,21 @@ Credentials are stored in `~/.config/expensee/`.
 
 ## Usage
 
-```
+```bash
 expensee [command] [options]
 ```
 
 **Options:**
 
 | Flag | Description |
-|------|-------------|
+| ------ | ------------- |
 | `-s, --sheetId` | Google Sheet ID (overrides saved config) |
 | `-m, --month` | Month name (defaults to current month) |
 
 **Commands:**
 
 | Command | Description |
-|---------|-------------|
+| --------- | ------------- |
 | `status` | Show expense statuses for the month (default) |
 | `mark <keys...>` | Mark one or more expenses as done (✔) |
 | `clear <keys...>` | Clear one or more expense statuses |
