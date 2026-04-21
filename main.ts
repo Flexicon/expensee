@@ -66,6 +66,11 @@ if (import.meta.main) {
       },
     )
     .default("status")
+    // Default cmd (status) - needs to be explicit to work with global options
+    .action((opts) => {
+      validateConfig(opts);
+      return runStatusCommand(opts);
+    })
     // Status cmd
     .command("status")
     .description("Report on the expenses current status for the month.")
