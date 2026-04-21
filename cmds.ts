@@ -1,6 +1,6 @@
-import { GoogleSpreadsheetCell } from "npm:google-spreadsheet";
+import { GoogleSpreadsheetCell } from "google-spreadsheet";
 import { Confirm, Input } from "@cliffy/prompt";
-import { ansi } from "@cliffy/ansi";
+import { tty } from "@cliffy/ansi/tty";
 import { colors } from "@cliffy/ansi/colors";
 import { Table } from "@cliffy/table";
 
@@ -31,13 +31,13 @@ export type KeyedCommandOptions = BaseCommandOptions & {
 export async function runStatusCommand(opts: StatusCommandOptions) {
   console.log("👀 Loading your expenses...");
   const cells = await loadCellsForMonth(opts.sheetId, opts.month);
-  process.stdout.write(ansi.cursorUp(1).cursorLeft.eraseLine());
-
+  const rows = cells.map((c) => [c.name, humanizeCellValue(c.value)]);
   const monthName = capitalize(MONTHS[opts.month - 1]);
 
-  new Table()
+  tty.cursorUp.cursorLeft.eraseLine();
+
+  new Table(...rows)
     .header(["Expense", `Status (${monthName})`].map(colors.bold))
-    .body(cells.map((c) => [c.name, humanizeCellValue(c.value)]))
     .minColWidth(12)
     .render();
 }

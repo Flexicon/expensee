@@ -3,7 +3,8 @@
     "@cliffy/ansi": "jsr:@cliffy/ansi@1.0.1",
     "@cliffy/command": "jsr:@cliffy/command@1.0.1",
     "@cliffy/prompt": "jsr:@cliffy/prompt@1.0.1",
-    "@cliffy/table": "jsr:@cliffy/table@1.0.1"
+    "@cliffy/table": "jsr:@cliffy/table@1.0.1",
+    "google-spreadsheet": "npm:google-spreadsheet@^5.2.0"
   },
   "tasks": {
     "build": "deno compile --allow-read --allow-write --allow-env --allow-net --output=./expensee ./main.ts",
