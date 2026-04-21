@@ -4,6 +4,7 @@
     "@cliffy/command": "jsr:@cliffy/command@1.0.1",
     "@cliffy/prompt": "jsr:@cliffy/prompt@1.0.1",
     "@cliffy/table": "jsr:@cliffy/table@1.0.1",
+    "google-auth-library": "npm:google-auth-library@^10.6.2",
     "google-spreadsheet": "npm:google-spreadsheet@^5.2.0"
   },
   "tasks": {

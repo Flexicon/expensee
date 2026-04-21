@@ -9,10 +9,10 @@ import {
   runSnoozeCommand,
   runStatusCommand,
 } from "./cmds.ts";
-import { Config, loadConfig } from "./config.ts";
-import { DataKey } from "./sheets.ts";
+import { type Config, loadConfig } from "./config.ts";
 import { MONTHS } from "./consts.ts";
 import { capitalize } from "./formatting.ts";
+import { DataKey } from "./sheets.ts";
 
 const validateConfig = (config: Config) => {
   if (!config.sheetId) {

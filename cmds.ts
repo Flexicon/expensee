@@ -1,21 +1,21 @@
-import { GoogleSpreadsheetCell } from "google-spreadsheet";
-import { Confirm, Input } from "@cliffy/prompt";
-import { tty } from "@cliffy/ansi/tty";
 import { colors } from "@cliffy/ansi/colors";
+import { tty } from "@cliffy/ansi/tty";
+import { Confirm, Input } from "@cliffy/prompt";
 import { Table } from "@cliffy/table";
+import type { GoogleSpreadsheetCell } from "google-spreadsheet";
 
-import { capitalize } from "./formatting.ts";
 import {
-  Config,
+  type Config,
   configCredsPath,
   copyCredsFile,
   hasCredsFile,
+  resetAllConfig,
   saveConfig,
 } from "./config.ts";
-import { resetAllConfig } from "./config.ts";
 import { MONTHS } from "./consts.ts";
-import { loadCellsForMonth, updateCell } from "./sheets.ts";
+import { capitalize } from "./formatting.ts";
 import type { DataKey } from "./sheets.ts";
+import { loadCellsForMonth, updateCell } from "./sheets.ts";
 
 export type BaseCommandOptions = {
   sheetId: string;

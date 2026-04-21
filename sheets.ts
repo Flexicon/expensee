@@ -1,9 +1,9 @@
+import { JWT } from "google-auth-library";
 import {
   GoogleSpreadsheet,
-  GoogleSpreadsheetCell,
-  GoogleSpreadsheetWorksheet,
-} from "npm:google-spreadsheet";
-import { JWT } from "npm:google-auth-library";
+  type GoogleSpreadsheetCell,
+  type GoogleSpreadsheetWorksheet,
+} from "google-spreadsheet";
 
 import { loadCredsFile } from "./config.ts";
 
